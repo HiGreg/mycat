@@ -1,0 +1,61 @@
+mysql 5.7.25 主从配置 没有做多大调优
+
+master
+
+server-id = 61
+log_bin = master-bin
+log_bin_index = master-bin.index
+binlog_ignore_db = mysql
+symbolic-links=0
+#一样配置
+gtid_mode=ON
+enforce-gtid-consistency=true
+
+slave-parallel-type=LOGICAL_CLOCK
+slave-parallel-workers=2
+master_info_repository=TABLE
+relay_log_info_repository=TABLE
+relay_log_recovery=ON
+binlog_group_commit_sync_delay=10
+binlog_gtid_simple_recovery = 1
+slave_skip_errors = ddl_exist_errors
+
+
+innodb_buffer_pool_size = 1000M
+innodb_flush_log_at_trx_commit  = 2
+innodb_buffer_pool_size=1G
+log-error=/var/log/mysqld1.log
+pid-file=/var/run/mysqld/mysqld.pid
+
+#________________________________
+
+
+
+slave
+
+
+server-id = 62
+log_bin = master-bin
+log_bin_index = master-bin.index
+binlog_ignore_db = mysql
+symbolic-links=0
+gtid_mode=ON
+enforce-gtid-consistency=true
+
+slave-parallel-type=LOGICAL_CLOCK
+slave-parallel-workers=2
+master_info_repository=TABLE
+relay_log_info_repository=TABLE
+relay_log_recovery=ON
+binlog_group_commit_sync_delay=10
+binlog_gtid_simple_recovery = 1
+slave_skip_errors = ddl_exist_errors
+
+innodb_buffer_pool_size=1G
+innodb_buffer_pool_size = 1000M
+innodb_flush_log_at_trx_commit  = 2
+
+
+
+log-error=/var/log/mysqld.log
+pid-file=/var/run/mysqld/mysqld.pid
